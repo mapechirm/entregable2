@@ -1,8 +1,8 @@
 const platform = () => {
     let btn = document.getElementById("agregarPlataforma");
     let plataforma = document.getElementById("plataforma");
+    let form = document.getElementById("form");
     let plataformasDiv = document.getElementById("plataformas");
-    var plataformas = document.querySelectorAll(".cerrar");
 
     btn.addEventListener("click", () => {
         let newDiv = document.createElement("div");
@@ -16,16 +16,26 @@ const platform = () => {
         cross.innerHTML = "&times;";
         cross.className = "cerrar";
         newDiv.appendChild(cross);
-        plataformas = document.querySelectorAll(".cerrar");
-    });
-
-    plataformas.forEach((element) => {
-        element.addEventListener("click", () => {
-            /* let div = element.parentElement;
-            div.remove(); */
-            alert("Wuenas");
+        input = checkbox(plataforma.value);
+        form.appendChild(input);
+        document.querySelectorAll(".cerrar").forEach((element) => {
+            element.addEventListener("click", () => {
+                let div = element.parentElement;
+                div.remove();
+            });
         });
     });
+};
+
+const checkbox = (plataforma) => {
+    let newInput = document.createElement("input");
+    newInput.name = "plataformas[]";
+    newInput.type = "checkbox";
+    newInput.value = plataforma;
+    newInput.checked = true;
+    newInput.style.display = "none";
+
+    return newInput;
 };
 
 platform();

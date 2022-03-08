@@ -27,7 +27,7 @@ class CreateVideogameRequest extends FormRequest
         return [
             "name" => 'required|min:3',
             'precio' => 'required|numeric',
-            'imagen' => 'required|mimes:jpeg,jpg,png'        
+            'imagen' => 'required|mimes:jpeg,jpg,png',
         ];
     }
 

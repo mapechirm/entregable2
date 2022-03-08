@@ -15,6 +15,7 @@
           method="post"
           class="d-grid gap-2 needs-validation"
           enctype="multipart/form-data"
+          id="form"
         >
         @csrf
           <div class="d-flex flex-wrap justify-content-center">
@@ -77,20 +78,21 @@
                   <select class="form-select" id="plataforma">
                     @foreach ($platforms as $platform)
                         <option value="{{ $platform -> nombre }}">{{ $platform -> nombre }}</option>
-                    @endforeach  
+                    @endforeach
                   </select>
                   <button class="btn btn-primary btn-sm" name="agregarPlataforma" type="button" id="agregarPlataforma" value="">Agregar Plataforma</button>
                 </div>
               </div>
             </div>
           </div>
-      
+
+          
           <input
-            type="submit"
-            value="Registrar videojuego"
-            class="btn btn-success m-2"
-            name="registrarUsuario"
-            style="width: 16rem; justify-self:center;"
+          type="submit"
+          value="Registrar videojuego"
+          class="btn btn-success m-2"
+          name="registrarUsuario"
+          style="width: 16rem; justify-self:center;"
           />
         </form>
     </div>

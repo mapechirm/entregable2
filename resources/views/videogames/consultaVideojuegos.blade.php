@@ -40,14 +40,17 @@
                 </button>
               </td>
               <td>
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  data-bs-toggle="modal"
-                  data-bs-target="#eliminarVideojuego{{ $cont++ }}"
+                <form class="form-eliminar" action="{{ route("videojuegos.destroy", ["videojuego" => $videojuego]) }}" method="post">
+                  @method("DELETE")
+                  @csrf
+                  <button
+                  type="submit"
+                  name="btnSubmitEliminar"
+                  class="btn btn-danger form-eliminar"
                 >
-                  Eliminar registro
+                  Eliminar Registro
                 </button>
+                </form>
               </td>
               @endcan
             </tr>
@@ -60,7 +63,6 @@
             @can('create-videogame')
               @foreach ($videojuegos as $videojuego)
                   @include('partials.modalActualizar')
-                  @include('partials.modalBorrar')
                   @php
                       $cont++
                   @endphp
@@ -90,7 +92,7 @@
                   </form>
                 </td>
                 <td class="text-center">
-                  <form action="{{ route('videojuegos.forceDelete', $videogame) }}" method="POST">
+                  <form action="{{ route('videojuegos.forceDelete', $videogame) }}" method="POST" class="form-eliminar-permanentemente">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-danger" type="submit">Eliminar</button>
@@ -104,4 +106,55 @@
         
       </div>
     </x-slot>
+    
+
+    @section('sweet-alert')
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if ( session('borrado') == 'wuenas' )
+      <script> 
+      Swal.fire(
+        "Eliminación exitosa",
+        "El videojuego se ha eliminado correctamente",
+        "success"
+      );
+    </script>
+    @endif
+    <script>
+    document.querySelectorAll(".form-eliminar").forEach((element) => {
+      element.addEventListener("submit", (event) => {
+          event.preventDefault();
+          Swal.fire({
+              title: "¿Esta seguro que desea eliminar el videojuego?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Eliminar",
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  element.submit();
+              }
+          });
+        });
+      });
+    </script>
+    <script>document.querySelectorAll(".form-eliminar-permanentemente").forEach((element) => {
+      element.addEventListener("submit", (event) => {
+          event.preventDefault();
+          Swal.fire({
+              title: "¿Esta seguro que desea eliminar permanentemente el videojuego?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Eliminar permanentemente",
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  element.submit();
+              }
+          });
+        });
+      });
+    </script>
+    @endsection
 </x-template>

@@ -12,7 +12,7 @@
         </div>
         <div class="modal-body">Nombre del videojuego:  {{ $videojuego -> nombre }}</div>
         <div class="modal-footer">
-          <form action="{{ route("videojuegos.destroy", ["videojuego" => $videojuego]) }}" method="post">
+          <form action="{{ route("videojuegos.destroy", ["videojuego" => $videojuego]) }}" method="post" class="form-eliminar">
             @method("DELETE")
             @csrf
             <button

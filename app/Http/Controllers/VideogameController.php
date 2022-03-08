@@ -47,8 +47,16 @@ class VideogameController extends Controller
             
             if ($videogame -> save()) {
                 ImageSet::dispatch($videogame);
-                $videogame -> platforms() -> attach([1,2]); // Modificar
-                Mail::to('120035649@upq.edu.mx') -> send(new MailManager($videogame));
+                $platforms = Platform::all();
+                $videogame -> platforms() -> attach(
+                    array_map(function ($request) use ($platforms) {
+                        foreach ($platforms as $platform) {
+                            if ($request == $platform -> nombre) {
+                                return $platform -> id;
+                            }
+                        }
+                    }, $request -> get('plataformas')));
+                // Mail::to('120035649@upq.edu.mx') -> send(new MailManager($videogame));
                 return back() -> with('success', "El videojuego fue registrado correctamente.");
             }
             return back() -> with('danger', "El videojuego no pudo ser registrado correctamente.");
@@ -74,7 +82,7 @@ class VideogameController extends Controller
                 ],
                 'precio' => 'required|numeric',
                 'imagen' => 'nullable|mimes:jpeg,jpg,png',
-                'category' => 'exists:categories, id'
+                'category' => 'exists:categories,id'
             ], [
                 "nombre.required" => "Por favor ingrese el nombre del videojuego",
                 "nombre.min" => "Por favor agregue un nombre válido con minimo 3 letras",
@@ -100,7 +108,14 @@ class VideogameController extends Controller
 
             if ($videojuego -> save()) {
                 ImageSet::dispatch($videojuego);
-                $videojuego -> platforms() -> attach([1,2]);
+                $platforms = Platform::all();
+                $videojuego -> platforms() -> attach(array_map(function ($request) use ($platforms) {
+                    foreach ($platforms as $platform) {
+                        if ($request == $platform -> nombre) {
+                            return $platform -> id;
+                        }
+                    }
+                }, $request -> get('plataformas')));
                 return back() -> with('success', "El videojuego fue actualizado correctamente.");
             }
         } catch (Exception $ex) {
@@ -113,7 +128,7 @@ class VideogameController extends Controller
         try {
             $this -> authorize('create-videogame');
             $videojuego -> delete();
-            return back() -> with('success', "El videojuego fue eliminado correctamente.");
+            return back() -> with('borrado', 'wuenas');
         }
         catch (Exception $ex) {
             return back() -> with('danger', "El videojuego no pudo ser eliminado correctamente." . $ex);
@@ -136,6 +151,6 @@ class VideogameController extends Controller
         Storage::delete("public/" . $videojuego -> image);
 
         $videojuego -> forceDelete();
-        return back() -> with('success', "El videojuego fue eliminado permanentemente con éxito.");
+        return back() -> with('borrado', 'wuenas');
     }
 }
