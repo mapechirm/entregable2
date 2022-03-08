@@ -20,6 +20,6 @@ class CreateVideogamePolicy
     }
 
     public function create (User $user) {
-        return $user -> perfil === 1;
+        return $user -> perfil == 1;
     }
 }
